@@ -1,0 +1,31 @@
+# CI for this content-only repository — fleet security standard.
+#
+# CodeQL / code scanning is NOT applicable to this repository: it has no
+# CodeQL-supported language (content is Markdown/text only). Documented
+# as a fleet limitation rather than worked around with an empty-matrix
+# or always-failing workflow.
+#
+# The runnable checks for a content-only repository: every tracked text
+# file decodes as UTF-8, and every JSON file parses.
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    name: Validate repository content
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Validate text encoding and JSON
+        run: python3 .github/scripts/validate_content.py
